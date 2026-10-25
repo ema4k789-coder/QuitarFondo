@@ -29,13 +29,12 @@ jobs:
         unzip FondoPro-flujo-herramientas.zip
         cd FondoPro/capacitor
         npm install
-        npm install @capacitor/core @capacitor/cli Android
+        npm install @capacitor/core @capacitor/cli
 
     - name: Build Android App
       run: |
         cd FondoPro/capacitor
         npm run build --if-present
-        # Crea la plataforma nativa de Android que no venía en tu ZIP
         npx cap add android
         npx cap sync
         cd android
