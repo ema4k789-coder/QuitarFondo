@@ -24,11 +24,6 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        cmdline-tools-version: '11.0'
-
     - name: Install Dependencies
       run: |
         unzip FondoPro-main.zip
@@ -43,6 +38,7 @@ jobs:
         npx cap sync || true
         if [ -d "android" ]; then
           cd android
+          chmod +x gradlew
           ./gradlew assembleDebug
         else
           echo "Error: No se encontró la carpeta de Android dentro del proyecto."
