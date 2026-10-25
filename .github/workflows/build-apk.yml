@@ -29,21 +29,18 @@ jobs:
         unzip FondoPro-flujo-herramientas.zip
         cd FondoPro/capacitor
         npm install
-        npm install @capacitor/core @capacitor/cli
+        npm install @capacitor/core @capacitor/cli Android
 
     - name: Build Android App
       run: |
         cd FondoPro/capacitor
         npm run build --if-present
+        # Crea la plataforma nativa de Android que no venía en tu ZIP
+        npx cap add android
         npx cap sync
-        if [ -d "android" ]; then
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
-        else
-          echo "Error: No se encontro la carpeta nativa de Android."
-          exit 1
-        fi
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
