@@ -1,0 +1,56 @@
+name: Build FondoPro APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Preparar archivos web
+        run: |
+          mkdir -p capacitor/www
+          cp index.html styles.css app.js manifest.json capacitor/www/
+
+      - name: Instalar dependencias y preparar Android
+        working-directory: capacitor
+        run: |
+          npm install
+          npx cap add android
+          npx cap sync android
+
+      - name: Compilar APK de prueba
+        working-directory: capacitor/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Publicar APK para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: FondoPro-debug-APK
+          path: capacitor/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
