@@ -18,11 +18,12 @@ jobs:
       with:
         node-version: '20'
 
+    # Corrección aquí: Cambiado a versión 21 para cumplir con Capacitor
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '21'
 
     - name: Process Project and Install Dependencies
       run: |
